@@ -1,46 +1,36 @@
 function setup() {
   let resolution = 380;
   createCanvas(4 * resolution, resolution);
+
+  background(0);
+  stroke(255);
+  noFill();
   noLoop();
 }
 
 function draw() {
-  background(0);
-  stroke(255);
-  noFill();
-
-  drawFareySequence(0, 1, 1, 1)
+  let start = new Fraction(0, 1);
+  let end   = new Fraction(1, 1);
+  drawFareySequence(start, end);
 }
 
-function drawFareySequence(p1, q1, p2, q2) {
-  let p3, q3;
-  [p3, q3] = fareyAdd(p1, q1, p2, q2);
+function drawFareySequence(start, end) {
+  let middle = start.fareyAdd(end)
+  drawFareyCircle(middle);
 
-  drawFareyCircle(p3, q3)
-
-  if (q3 < 100) {
-    drawFareySequence(p1, q1, p3, q3);
-    drawFareySequence(p3, q3, p2, q2);
+  if (middle.denominator < 100) {
+    drawFareySequence(start, middle);
+    drawFareySequence(middle, end);
   }
 }
 
-function fareyAdd(p1, q1, p2, q2) {
-  let p3 = p1 + p2;
-  let q3 = q1 + q2;
-  let commonFactor = gcd(p3, q3);
-  p3 = p3 / commonFactor;
-  q3 = q3 / commonFactor;
+function drawFareyCircle(fraction) {
+  let floatVal = fraction.toFloat();
+  let radius = fraction.fareyRadius();
 
-  return [p3, q3];
-}
-
-function drawFareyCircle(p1, q1) {
-  let fraction = p1 / parseFloat(q1);
-  let radius = Math.pow(1 / parseFloat(q1), 2) / 2;
-
-  let x = map(fraction, 0, 1, 0, width);
+  let x = map(floatVal, 0, 1, 0, width);
   let r = map(radius, 0, 1, 0, width);
-  circle(x, height - r, r)
+  circle(x, height - r, r);
 }
 
 function gcd(a, b) {
@@ -49,7 +39,7 @@ function gcd(a, b) {
   }
 
   return gcd(b, a % b);
-};
+}
 
 // Inspirations
 // The Coding Train [Coding Challenge #77: Recursion](https://www.youtube.com/watch?v=jPsZwrV9ld0)
