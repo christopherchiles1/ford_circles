@@ -1,5 +1,6 @@
 function setup() {
-  createCanvas(400, 400);
+  let resolution = 380;
+  createCanvas(4 * resolution, resolution);
   noLoop();
 }
 
@@ -38,7 +39,7 @@ function drawFareyCircle(p1, q1) {
   let radius = Math.pow(1 / parseFloat(q1), 2) / 2;
 
   let x = map(fraction, 0, 1, 0, width);
-  let r = map(radius, 0, 1, 0, height);
+  let r = map(radius, 0, 1, 0, width);
   circle(x, height - r, r)
 }
 
