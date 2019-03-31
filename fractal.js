@@ -25,16 +25,16 @@ function draw() {
 function drawFareySequence(start, end, depth) {
   let middle = start.fareyAdd(end);
 
+  let r = map(middle.denominator, 2, 30, 150, 0);
+  let g = map(middle.denominator, 2, 30, 0, 255);
+  let b = map(middle.denominator, 2, 30, 0, 75);
+  fill(r, g, b);
+  drawFareyCircle(middle);
+  noFill();
   if (middle.denominator === depth) {
-    fill(100);
-    drawFareyCircle(middle);
-    noFill();
     textAlign(CENTER);
-    text(middle.toString(), map(middle.toFloat(), 0, 1, 0, width), height - 20)
+    text(middle.toString(), map(middle.toFloat(), 0, 1, 0, width), height - 8)
     textAlign(LEFT);
-  } else {
-    noFill();
-    drawFareyCircle(middle);
   }
 
   if (middle.denominator < depth) {
@@ -49,7 +49,7 @@ function drawFareyCircle(fraction) {
 
   let x = map(floatVal, 0, 1, 0, width);
   let r = map(radius, 0, 1, 0, width);
-  circle(x, height - r, r);
+  circle(x, height - r - 25, r);
 }
 
 // Inspirations
