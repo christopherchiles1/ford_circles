@@ -23,6 +23,10 @@ class Fraction {
     return this.numerator / parseFloat(this.denominator);
   }
 
+  toString() {
+    return `${this.numerator} / ${this.denominator}`
+  }
+
   _gcd (a, b) {
     if (b === 0) {
       return a;
