@@ -1,6 +1,6 @@
 function setup() {
   createCanvas(720, 405);
-  depthSlider = createSlider(2, 30, 5).position(20, 20);;
+  depthSlider = createSlider(1, 16, 5);
   depthSlider.position(20, 20);
 
   start = new Fraction(0, 1);
