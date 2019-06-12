@@ -1,42 +1,45 @@
 function setup() {
-  let resolution = 380;
-
-  createCanvas(4 * resolution, resolution + 25);
-  depthSlider = createSlider(2, 30, 5);
+  createCanvas(720, 405);
+  depthSlider = createSlider(2, 30, 5).position(20, 20);;
   depthSlider.position(20, 20);
 
-  stroke(0);
+  start = new Fraction(0, 1);
+  end   = new Fraction(1, 1);
 }
 
 function draw() {
-  background(255);
-
   let depth = depthSlider.value();
-  textSize(16);
-  text(`Depth (${depth})`, depthSlider.x + depthSlider.width + 15, depthSlider.y + 8);
 
-  let start = new Fraction(0, 1);
-  let end   = new Fraction(1, 1);
+  background(255);
   drawFareyCircle(start);
   drawFareyCircle(end);
   drawFareySequence(start, end, depth);
+  drawDepthLabel(depth);
+}
+
+function drawDepthLabel(depth) {
+  fill(255);
+  noStroke();
+  rect(0, 0, width, 20);
+
+  fill(0);
+  textSize(16);
+  textAlign(LEFT);
+  text(`Depth (${depth})`, depthSlider.x + depthSlider.width + 15, depthSlider.y + 8);
 }
 
 function drawFareySequence(start, end, depth) {
   let middle = start.fareyAdd(end);
 
   if (middle.denominator <= depth) {
-    let numFactors = factorize(middle.denominator).length - 2;
-    let factorability = numFactors / parseFloat(middle.denominator);
-    let grayscale = map(factorability, 0, 0.5, 200, 50);
-    fill(grayscale);
-
     drawFareyCircle(middle);
-    noFill();
+
+    // Add labels for the last added circles only
     if (middle.denominator === depth) {
+      fill(0);
+      noStroke();
       textAlign(CENTER);
       text(middle.toString(), map(middle.toFloat(), 0, 1, 0, width), height - 8)
-      textAlign(LEFT);
     }
 
     drawFareySequence(start, middle, depth);
@@ -45,11 +48,18 @@ function drawFareySequence(start, end, depth) {
 }
 
 function drawFareyCircle(fraction) {
+  // Color circles by their factorability
+  let numFactors = factorize(fraction.denominator).length - 2;
+  let factorability = numFactors / parseFloat(fraction.denominator);
+  let grayscale = map(factorability, 0, 0.5, 200, 50);
+
   let floatVal = fraction.toFloat();
   let radius = fraction.fareyRadius();
 
   let x = map(floatVal, 0, 1, 0, width);
   let r = map(radius, 0, 1, 0, width);
+  stroke(0);
+  fill(grayscale);
   circle(x, height - r - 25, r);
 }
 
