@@ -11,6 +11,8 @@ function draw() {
   let depth = depthSlider.value();
 
   background(255);
+  stroke(0);
+  drawXAxis();
   drawFareyCircle(start);
   drawFareyCircle(end);
   drawFareySequence(start, end, depth);
@@ -28,10 +30,18 @@ function drawDepthLabel(depth) {
   text(`Depth (${depth})`, depthSlider.x + depthSlider.width + 15, depthSlider.y + 8);
 }
 
+function drawXAxis() {
+  line(0, 380, width, 380);
+}
+
 function drawFareySequence(start, end, depth) {
   let middle = start.fareyAdd(end);
 
   if (middle.denominator <= depth) {
+    stroke(0);
+    if (middle.denominator === depth) {
+      stroke(255, 0, 0);
+    }
     drawFareyCircle(middle);
 
     // Add labels for the last added circles only
@@ -58,12 +68,11 @@ function drawFareyCircle(fraction) {
 
   let x = map(floatVal, 0, 1, 0, width);
   let r = map(radius, 0, 1, 0, width);
-  stroke(0);
   fill(grayscale);
   circle(x, height - r - 25, r);
 }
 
-  function factorize(number) {
+function factorize(number) {
   let factors = [];
   for (let i = 1; i <= number; i++) {
     if (number % i === 0) {
